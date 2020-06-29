@@ -1,17 +1,19 @@
-package com.sirmiss.home.journals.test;
+package com.eliminator.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TEST")
-public class ExampleEntity {
+@Table(name = "product_details")
+public class ProductDetail {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id")
@@ -21,5 +23,9 @@ public class ExampleEntity {
   private String name;
   @Column(name = "description")
   private String description;
+  @Column(name = "price")
+  private BigDecimal price = null;
+  @Column(name = "category")
+  private String category = null;
 
 }
