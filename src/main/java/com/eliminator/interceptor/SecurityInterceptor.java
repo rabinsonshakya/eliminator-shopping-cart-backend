@@ -22,6 +22,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     if (handler instanceof HandlerMethod){
 
+      //Dummy Authorization Validation, Jwt can be used fot user authentication
       if(StringUtils.equals(request.getHeader(AUTHORIZATION), (TOKEN))){
         return Boolean.TRUE;
       }else{
