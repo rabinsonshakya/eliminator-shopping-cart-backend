@@ -1,0 +1,181 @@
+openapi: 3.0.0
+info:
+  title: Eliminator Shopping Cart
+  version: '1.0'
+  description: Open API specification for Eliminator Shopping Cart test
+servers:
+  - url: 'http://192.168.1.204:8090'
+    description: ''
+paths:
+  /eliminator/productDetails:
+    get:
+      summary: get all the products and its details
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDetails'
+              examples:
+                example-1:
+                  value:
+                    - id: 1
+                      name: MK LXXXV (Earth-199999)
+                      description: Iron Man Armor 85th and final Iron Man Armor
+                      price: 246875.56
+                      category: Marvel
+                    - id: 2
+                      name: "Captain's Shield"
+                      description: Shield made of Vibranium-steel Alloy
+                      price: 8512843.78
+                      category: Marvel
+      operationId: get-eliminator-productDetails
+      description: get all the products and its details
+  /eliminator/shoppingcart:
+    post:
+      summary: POST endpoint to create Shopping Cart
+      operationId: post-eliminator-cart
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers:
+            'Id:':
+              description: Id of the Cart Created
+              schema:
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      description: use to create Shopping Cart
+    parameters: []
+  '/eliminator/shoppingcart/{cart_id}':
+    parameters:
+      - schema:
+          type: string
+        name: cart_id
+        description: Id of the Cart
+        in: path
+        required: true
+    post:
+      summary: POST endpoint to update or modify shopping cart
+      operationId: post-eliminator-cart-cart_id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - properties:
+                    product:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/ProductsInCart'
+              type: object
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+        description: ''
+      description: update or modify shopping cart
+    get:
+      summary: GET endpoint for shoppng cart by id
+      operationId: get-eliminator-cart-cart_id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+      description: get shoppng cart by id
+  '/eliminator/shoppingcart/{cart_id}/checkout':
+    parameters:
+      - schema:
+          type: string
+        name: cart_id
+        in: path
+        required: true
+    post:
+      summary: POST endpoint for Checkout
+      operationId: post-eliminator-cart-cart_id-checkout
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                paymentinfos:
+                  type: array
+                  items: {}
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+      description: Checkout
+components:
+  schemas:
+    ProductDetails:
+      title: ProductDetails
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: string
+        catagory:
+          type: string
+    Cart:
+      title: Cart
+      type: object
+      properties:
+        totalAmount:
+          type: number
+        dateCreated:
+          type: string
+          format: date-time
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductsInCart'
+        orderCompleted:
+          type: boolean
+    ProductsInCart:
+      title: ProductsInCart
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        quantity:
+          type: number
+        price:
+          type: number
