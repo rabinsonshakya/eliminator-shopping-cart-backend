@@ -5,7 +5,10 @@ import com.eliminator.model.Cart;
 import com.eliminator.model.CartContent;
 import com.eliminator.repo.CartRepo;
 import com.eliminator.repo.ProductDetailRepo;
+import com.mongodb.client.result.UpdateResult;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -27,8 +30,7 @@ public class EliminatorService {
   MongoTemplate mongoTemplate;
 
   public List<ProductDetail> getAllProducts() {
-    List<ProductDetail> all = repo.findAll();
-    return all;
+    return repo.findAll();
   }
 
   public Cart getCartById(String cartId) {
@@ -37,12 +39,25 @@ public class EliminatorService {
   }
 
   public Cart createNewCart(Cart newCart) {
-    return mongoCartRepo.save(newCart);
+    if (newCart.getId() == null) {
+      return mongoCartRepo.save(newCart);
+    } else {
+      return newCart;
+    }
   }
 
-  public Cart saveAndUpdate(String cartId, CartContent cartContent) {
+  public Cart updateCart(String cartId, CartContent cartContent) throws Exception {
     Query query = new Query(Criteria.where("_id").is(cartId));
-    mongoTemplate.updateFirst(query, Update.update("products", cartContent.getProducts()), Cart.class);
-    return mongoTemplate.findOne(query, Cart.class);
+    UpdateResult updateResult = mongoTemplate.updateFirst(query, Update.update("products", cartContent.getProducts()), Cart.class);
+    if (updateResult != null && updateResult.wasAcknowledged()) {
+      return mongoTemplate.findOne(query, Cart.class);
+    } else {
+      throw new NotFoundException("Cart Not Found");
+    }
+  }
+
+  public void deleteCart(String cartId) {
+    Query query = new Query(Criteria.where("_id").is(cartId));
+    mongoTemplate.remove(query, Cart.class);
   }
 }

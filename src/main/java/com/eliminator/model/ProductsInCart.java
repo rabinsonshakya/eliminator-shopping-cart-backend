@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
+@Builder
 public class ProductsInCart   {
   @JsonProperty("id")
   private BigDecimal id = null;
@@ -26,7 +27,7 @@ public class ProductsInCart   {
   private String name = null;
 
   @JsonProperty("quantity")
-  private String quantity = null;
+  private int quantity;
 
   @JsonProperty("price")
   private BigDecimal price = null;
