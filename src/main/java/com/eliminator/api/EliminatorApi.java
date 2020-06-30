@@ -60,7 +60,7 @@ public interface EliminatorApi {
       produces = {"application/json"},
       consumes = {"application/json", "application/xml", "multipart/form-data"},
       method = RequestMethod.POST)
-  ResponseEntity<Cart> postEliminatorCartCartId(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId, @ApiParam(value = "") @Valid @RequestBody CartContent cartContent);
+  ResponseEntity<Cart> postEliminatorCartCartId(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId, @ApiParam(value = "") @Valid @RequestBody CartContent cartContent) throws Exception;
 
 
   @ApiOperation(value = "POST endpoint for Checkout", nickname = "postEliminatorCartCartIdCheckout", notes = "Checkout", tags = {})

@@ -24,6 +24,7 @@ import javax.validation.Valid;
 @ToString
 @EqualsAndHashCode
 @Document(collection = "shoppingcart")
+@Builder
 public class Cart {
   @Id
   private String id;

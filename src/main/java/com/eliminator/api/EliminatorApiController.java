@@ -1,19 +1,14 @@
 package com.eliminator.api;
 
 
-import com.eliminator.api.EliminatorApi;
-import com.eliminator.repo.CartRepo;
-import com.eliminator.model.*;
+import com.eliminator.model.Body;
+import com.eliminator.model.Cart;
+import com.eliminator.model.CartContent;
+import com.eliminator.model.ProductDetails;
 import com.eliminator.service.EliminatorService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.result.UpdateResult;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +32,11 @@ public class EliminatorApiController implements EliminatorApi {
   EliminatorService eliminatorService;
 
   public ResponseEntity<Cart> getEliminatorCartCartId(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId) {
-    return new ResponseEntity<Cart>(eliminatorService.getCartById(cartId),HttpStatus.OK);
+    return new ResponseEntity<Cart>(eliminatorService.getCartById(cartId), HttpStatus.OK);
   }
 
   public ResponseEntity<List<ProductDetails>> getEliminatorProductDetails() {
-    ResponseEntity<List<ProductDetails>> responseEntity = new ResponseEntity(eliminatorService.getAllProducts(), HttpStatus.ACCEPTED);
+    ResponseEntity<List<ProductDetails>> responseEntity = new ResponseEntity(eliminatorService.getAllProducts(), HttpStatus.OK);
     return responseEntity;
   }
 
@@ -52,13 +47,13 @@ public class EliminatorApiController implements EliminatorApi {
     return new ResponseEntity<Object>(httpHeaders, HttpStatus.OK);
   }
 
-  public ResponseEntity<Cart> postEliminatorCartCartId(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId, @ApiParam(value = "") @Valid @RequestBody CartContent cartContent) {
-    Cart cart = eliminatorService.saveAndUpdate(cartId, cartContent);
+  public ResponseEntity<Cart> postEliminatorCartCartId(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId, @ApiParam(value = "") @Valid @RequestBody CartContent cartContent) throws Exception {
+    Cart cart = eliminatorService.updateCart(cartId, cartContent);
     return new ResponseEntity<Cart>(cart, HttpStatus.OK);
   }
 
   public ResponseEntity<Void> postEliminatorCartCartIdCheckout(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId, @ApiParam(value = "") @Valid @RequestBody Body body) {
-    return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
   }
 
 }
