@@ -27,7 +27,7 @@ public class ResponseControllerAdvice {
   @ExceptionHandler(Throwable.class)
   @ResponseBody
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ErrorrRS handleAnyThrowable(){
+  public ErrorrRS handleAnyThrowable(Exception e){
     ErrorrRS errorrRS = new ErrorrRS(ERR_02, "Server Side Error");
     return errorrRS;
   }

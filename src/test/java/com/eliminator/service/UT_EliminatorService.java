@@ -105,15 +105,9 @@ class UT_EliminatorService {
     products.add(ProductsInCart.builder().build());
     products.add(ProductsInCart.builder().build());
     CartContent cartContent = CartContent.builder().products(products).build();
-    new Expectations() {
-      {
-        mongoTemplate.updateFirst((Query) any, Update.update("products", cartContent.getProducts()), Cart.class);
-        result = null;
-      }
-    };
     Cart cart = null;
     try{
-      cart = underTest.updateCart(ID, cartContent);
+      cart = underTest.updateCart(ID, cart);
     }catch (NotFoundException ex){
       assertNull(cart);
     }
@@ -125,15 +119,12 @@ class UT_EliminatorService {
     ArrayList<ProductsInCart> products = new ArrayList<>();
     products.add(ProductsInCart.builder().build());
     products.add(ProductsInCart.builder().build());
-    CartContent cartContent = CartContent.builder().products(products).build();
+    Cart updatedCart = Cart.builder().id(ID).products(products).build();
 
     new Expectations() {
       {
-        updateResult.wasAcknowledged();
-        result = true;
-
-        mongoTemplate.updateFirst((Query) any, Update.update("products", cartContent.getProducts()), Cart.class);
-        result = updateResult;
+        mongoTemplate.save(any);
+        result = updatedCart;
 
         mongoTemplate.findOne((Query) any, Cart.class);
         result = newCart;
@@ -141,7 +132,7 @@ class UT_EliminatorService {
     };
     Cart cart = null;
     try{
-      cart = underTest.updateCart(ID, cartContent);
+      cart = underTest.updateCart(ID, cart);
     }catch (NotFoundException ex){
       fail();
     }

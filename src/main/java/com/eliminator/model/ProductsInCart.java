@@ -32,6 +32,9 @@ public class ProductsInCart   {
   @JsonProperty("price")
   private BigDecimal price = null;
 
+  @JsonProperty("imgUrl")
+  private String imgUrl = null;
+
   public ProductsInCart id(BigDecimal id) {
     this.id = id;
     return this;

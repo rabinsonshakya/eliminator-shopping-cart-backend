@@ -5,6 +5,7 @@ import com.eliminator.model.Cart;
 import com.eliminator.model.ProductsInCart;
 import com.eliminator.service.EliminatorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ class IT_EliminatorApiController {
 
   public static final String AUTHORIZATION = "authorization";
   public static final String TOKEN = "Token";
-  public static final String CART_WITH_BATMOBILE = "5ef9d615faa37f49810d913b";
+  public static final String CART_WITH_BATMOBILE = "5f03fe7c0e15185f45102061";
   public static final String BAT_WINGS = "BatWings";
   @Autowired
   private MockMvc mockMvc;
@@ -53,7 +54,8 @@ class IT_EliminatorApiController {
           .contentType("application/json")
           .content(objectMapper.writeValueAsString(cart))
           .header(AUTHORIZATION, TOKEN)).andReturn();
-      id = mvcResult.getResponse().getHeader("Id");
+      String response = mvcResult.getResponse().getContentAsString();
+      id = JsonPath.parse(response).read("$[0].id");
       assertNotNull(id);
     } catch (Exception e) {
       //remove the created test data

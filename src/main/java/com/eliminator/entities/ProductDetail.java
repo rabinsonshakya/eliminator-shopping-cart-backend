@@ -27,5 +27,7 @@ public class ProductDetail {
   private BigDecimal price = null;
   @Column(name = "category")
   private String category = null;
+  @Column(name = "img_url")
+  private String imgUrl = null;
 
 }

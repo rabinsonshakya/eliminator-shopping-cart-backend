@@ -2,13 +2,11 @@ package com.eliminator.service;
 
 import com.eliminator.entities.ProductDetail;
 import com.eliminator.model.Cart;
-import com.eliminator.model.CartContent;
 import com.eliminator.repo.CartRepo;
 import com.eliminator.repo.ProductDetailRepo;
 import com.mongodb.client.result.UpdateResult;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -46,11 +44,11 @@ public class EliminatorService {
     }
   }
 
-  public Cart updateCart(String cartId, CartContent cartContent) throws Exception {
+  public Cart updateCart(String cartId, Cart cart) throws Exception {
     Query query = new Query(Criteria.where("_id").is(cartId));
-    UpdateResult updateResult = mongoTemplate.updateFirst(query, Update.update("products", cartContent.getProducts()), Cart.class);
-    if (updateResult != null && updateResult.wasAcknowledged()) {
-      return mongoTemplate.findOne(query, Cart.class);
+    Cart existingCart = mongoTemplate.findOne(query, Cart.class);
+    if (existingCart != null) {
+      return mongoTemplate.save(cart);
     } else {
       throw new NotFoundException("Cart Not Found");
     }
@@ -60,4 +58,15 @@ public class EliminatorService {
     Query query = new Query(Criteria.where("_id").is(cartId));
     mongoTemplate.remove(query, Cart.class);
   }
+
+  public Cart checkOut(String cartId, Cart cart) throws NotFoundException {
+    Query query = new Query(Criteria.where("_id").is(cartId));
+    UpdateResult updateResult = mongoTemplate.updateFirst(query, Update.update("orderCompleted", true), Cart.class);
+    if (updateResult != null && updateResult.wasAcknowledged()) {
+      return mongoTemplate.findOne(query, Cart.class);
+    } else {
+      throw new NotFoundException("Cart Not Found");
+    }
+  }
+
 }
