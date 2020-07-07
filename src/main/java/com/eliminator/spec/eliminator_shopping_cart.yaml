@@ -116,8 +116,8 @@ paths:
         name: cart_id
         in: path
         required: true
-    post:
-      summary: POST endpoint for Checkout
+    put:
+      summary: PUT endpoint for Checkout
       operationId: post-eliminator-cart-cart_id-checkout
       responses:
         '200':

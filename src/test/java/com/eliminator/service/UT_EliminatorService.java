@@ -3,7 +3,6 @@ package com.eliminator.service;
 
 import com.eliminator.entities.ProductDetail;
 import com.eliminator.model.Cart;
-import com.eliminator.model.CartContent;
 import com.eliminator.model.ProductsInCart;
 import com.eliminator.repo.CartRepo;
 import com.eliminator.repo.ProductDetailRepo;
@@ -12,10 +11,8 @@ import javassist.NotFoundException;
 import mockit.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -104,7 +101,6 @@ class UT_EliminatorService {
     ArrayList<ProductsInCart> products = new ArrayList<>();
     products.add(ProductsInCart.builder().build());
     products.add(ProductsInCart.builder().build());
-    CartContent cartContent = CartContent.builder().products(products).build();
     Cart cart = null;
     try{
       cart = underTest.updateCart(ID, cart);

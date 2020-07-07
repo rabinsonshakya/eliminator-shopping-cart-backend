@@ -5,9 +5,7 @@
  */
 package com.eliminator.api;
 
-import com.eliminator.model.Body;
 import com.eliminator.model.Cart;
-import com.eliminator.model.CartContent;
 import com.eliminator.model.ProductDetails;
 import io.swagger.annotations.*;
 import javassist.NotFoundException;
