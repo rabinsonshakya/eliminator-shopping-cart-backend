@@ -10,6 +10,7 @@ import com.eliminator.model.Cart;
 import com.eliminator.model.CartContent;
 import com.eliminator.model.ProductDetails;
 import io.swagger.annotations.*;
+import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +32,7 @@ public interface EliminatorApi {
   @RequestMapping(value = "/eliminator/shoppingcart/{cart_id}",
       produces = {"application/json"},
       method = RequestMethod.GET)
-  ResponseEntity<Cart> getEliminatorCartCartId(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId);
+  ResponseEntity<Cart> getCartWithId(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId);
 
 
   @ApiOperation(value = "get all the products and its details", nickname = "getEliminatorProductDetails", notes = "get all the products and its details", response = ProductDetails.class, responseContainer = "List", tags = {})
@@ -50,7 +51,7 @@ public interface EliminatorApi {
       produces = {"application/json"},
       consumes = {"application/json"},
       method = RequestMethod.POST)
-  ResponseEntity<Object> postEliminatorCart(@ApiParam(value = "") @Valid @RequestBody Cart body);
+  ResponseEntity<Cart> postEliminatorCart(@ApiParam(value = "") @Valid @RequestBody Cart body);
 
 
   @ApiOperation(value = "POST endpoint to update or modify shopping cart", nickname = "postEliminatorCartCartId", notes = "update or modify shopping cart", response = Cart.class, tags = {})
@@ -60,15 +61,15 @@ public interface EliminatorApi {
       produces = {"application/json"},
       consumes = {"application/json", "application/xml", "multipart/form-data"},
       method = RequestMethod.POST)
-  ResponseEntity<Cart> postEliminatorCartCartId(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId, @ApiParam(value = "") @Valid @RequestBody CartContent cartContent) throws Exception;
+  ResponseEntity<Cart> postUpdateEliminatorCartById(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId, @ApiParam(value = "") @Valid @RequestBody Cart cart) throws Exception;
 
 
-  @ApiOperation(value = "POST endpoint for Checkout", nickname = "postEliminatorCartCartIdCheckout", notes = "Checkout", tags = {})
+  @ApiOperation(value = "PUT endpoint for Checkout", nickname = "postEliminatorCartCartIdCheckout", notes = "Checkout", tags = {})
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "OK")})
   @RequestMapping(value = "/eliminator/shoppingcart/{cart_id}/checkout",
       consumes = {"application/json", "application/xml"},
-      method = RequestMethod.POST)
-  ResponseEntity<Void> postEliminatorCartCartIdCheckout(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId, @ApiParam(value = "") @Valid @RequestBody Body body);
+      method = RequestMethod.PUT)
+  ResponseEntity<Cart> checkoutAndCompleteOrdr(@ApiParam(value = "", required = true) @PathVariable("cart_id") String cartId, @ApiParam(value = "") @Valid @RequestBody Cart body) throws NotFoundException, Exception;
 
 }
